@@ -1,50 +1,72 @@
-import os
-#The color for the rings
-colors = {
-    "red": ("\033[31m|-----RED-----|\033[0m"),
-    "orange":("\033[38;2;255;165;0m|----ORANGE----|\033[0m"),
-    "yellow":("\033[33m|---YELLOW---|\033[0m"),
-    "green":("\033[32m|--GREEN--|\033[0m"),
-    "blue":("\033[34m|-BLUE-|\033[0m"),
-}
-stack = []
-#Repeats the code
-while True:
+class Ring: #ring class to create rings with colors and art
+    colors = {
+        "red": "\033[91m|---------RED---------|\033[0m",
+        "blue": "\033[94m       |--BLUE--|   \033[0m",
+        "green": "\033[92m     |---GREEN---|  \033[0m",
+        "yellow": "\033[93m   |----YELLOW----| \033[0m",
+        "white": "\033[97m  |------WHITE------|\033[0m"
+    }
+   
+    def __init__(self, color): #constructor to create a ring with a color and art
+        self.color = color  
+        self.art = self.colors.get(color, "unknown")  
+        self.onStack = False  
 
-    userInput = input("Type 1 to add a ring, 2 to remove a ring, type 3 to exit: ")
-    #If the user inputs 1, then it allows the user to add their desired ring.
-    if userInput == "1":
-        rings = input("Add color (red, orange, yellow, green, blue): ")
-        if rings in colors:
-            stack.append(rings)
-            print([rings])
-            os.system('cls')
-        else:
-            print("Invalid color.")
-#If the user inputs 2, then they can remove rings
-    elif userInput == "2":
-        if not stack:
-            os.system('cls')
-            print("Stack is empty.")
-            continue
+ring1 = Ring("red")
+ring2 = Ring("white")
+ring3 = Ring("yellow")
+ring4 = Ring("green")
+ring5 = Ring("blue")
 
-        rings = input("Remove color (red, orange, yellow, green, blue): ")
-        if rings != stack[-1]:
-            print(f"Top ring is {stack[-1]}, must remove it first to get to your desired ring")
-            continue
-        os.system('cls')
-        stack.pop()
-        print(f"Removed {rings} ring.")
+ringStack = []
 
-    #If the user inputs 3, it makes the user exit the program.
-    elif userInput == "3":
-        print("Goodbye!")
-        break
+def push(ring): #push function to add rings to the stack
+    if not ring.onStack:  
+        ringStack.append(ring)
+        ring.onStack = True
+        print(f"Pushed {ring.color}: {[r.color for r in ringStack]}")
 
+def pop(): #pop function to remove rings from the stack
+    if ringStack:
+        removedRing = ringStack.pop()
+        removedRing.onStack = False
+        print(f"Popped {removedRing.color}: {[r.color for r in ringStack]}")
     else:
-        print("Invalid choice.")
-#Shows the current stack 
-    if stack:
-        print("Current stack:")
-        for rings in reversed(stack):
-            print(colors[rings])
+        print("Stack is empty!")
+
+def userChoice():
+    while True:
+        print("\nCurrent Stack (Top to Bottom):") # display the stack from top to bottom
+        for r in reversed(ringStack):
+            print(r.art)
+
+        availableColors = [ring.color for ring in [ring1, ring2, ring3, ring4, ring5] if not ring.onStack] # get available colors
+        print("\nAvailable colors to add:", ", ".join(availableColors))
+       
+        print("-----OPTIONS-----")
+        print("1. Add a ring to the top")
+        print("2. Remove topmost ring")
+        print("3. Exit")
+       
+        userInput = input("Choose an option: ")
+       
+        if userInput == "1":
+            color = input("What color ring would you like to add?: ").lower()
+           
+            if color in availableColors:
+                newRing = next(ring for ring in [ring1, ring2, ring3, ring4, ring5] if ring.color == color) # create a new ring with the selected color
+                push(newRing)
+            else:
+                print("Invalid color. Please choose from the available colors.")
+       
+        elif userInput == "2":
+            pop()
+       
+        elif userInput == "3":
+            print("Exiting program.")
+            break  
+       
+        else:
+            print("Invalid option. Please select a valid option.")
+
+userChoice()
