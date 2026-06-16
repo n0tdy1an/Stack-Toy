@@ -1,32 +1,36 @@
+import os
 class Ring: #ring class to create rings with colors and art
+
     colors = {
-        "red": "\033[91m|---------RED---------|\033[0m",
-        "blue": "\033[94m       |--BLUE--|   \033[0m",
-        "green": "\033[92m     |---GREEN---|  \033[0m",
-        "yellow": "\033[93m   |----YELLOW----| \033[0m",
-        "white": "\033[97m  |------WHITE------|\033[0m"
+        "red": "\033[31m|------RED------|\033[0m",
+        "orange": "\033[38;2;255;165;0m|-----ORANGE-----|\033[38;2;255;165;0m",
+        "yellow": "\033[33m   |----YELLOW----| \033[0m",
+        "green": "\033[32m     |---GREEN---|  \033[0m",
+        "blue": "\033[34m       |--BLUE--|   \033[0m"
     }
    
     def __init__(self, color): #constructor to create a ring with a color and art
         self.color = color  
         self.art = self.colors.get(color, "unknown")  
         self.onStack = False  
-
+#assings a ring to each color
 ring1 = Ring("red")
-ring2 = Ring("white")
+ring2 = Ring("orange")
 ring3 = Ring("yellow")
 ring4 = Ring("green")
 ring5 = Ring("blue")
 
 ringStack = []
 
-def push(ring): #push function to add rings to the stack
+#funtion to add rings to the current stack
+def push(ring): 
     if not ring.onStack:  
         ringStack.append(ring)
         ring.onStack = True
         print(f"Pushed {ring.color}: {[r.color for r in ringStack]}")
 
-def pop(): #pop function to remove rings from the stack
+#function to remove rings from the stack
+def pop(): 
     if ringStack:
         removedRing = ringStack.pop()
         removedRing.onStack = False
@@ -34,23 +38,22 @@ def pop(): #pop function to remove rings from the stack
     else:
         print("Stack is empty!")
 
+#Displays the stack
 def userChoice():
     while True:
-        print("\nCurrent Stack (Top to Bottom):") # display the stack from top to bottom
+        print("\nCurrent Stack:") 
         for r in reversed(ringStack):
             print(r.art)
+            
 
-        availableColors = [ring.color for ring in [ring1, ring2, ring3, ring4, ring5] if not ring.onStack] # get available colors
-        print("\nAvailable colors to add:", ", ".join(availableColors))
+        #shows the available rings 
+        availableColors = [ring.color for ring in [ring1, ring2, ring3, ring4, ring5] if not ring.onStack] 
+
+        userInput = input("Type 1 to add a ring, 2 to remove a ring, and 3 to exit.")
        
-        print("-----OPTIONS-----")
-        print("1. Add a ring to the top")
-        print("2. Remove topmost ring")
-        print("3. Exit")
-       
-        userInput = input("Choose an option: ")
-       
+       #if the user inputs 1, then it allows the user to add a ring
         if userInput == "1":
+            print("\nAvailable colors to add:", ", ".join(availableColors))
             color = input("What color ring would you like to add?: ").lower()
            
             if color in availableColors:
@@ -59,11 +62,14 @@ def userChoice():
             else:
                 print("Invalid color. Please choose from the available colors.")
        
+       #if user inputs 2, then they can remove a ring
         elif userInput == "2":
+            print("\nAvailable colors to add:", ", ".join(availableColors))
             pop()
-       
+           
+        #if the user inputs 3, then it exits them from the program
         elif userInput == "3":
-            print("Exiting program.")
+            print("Goodbye!")
             break  
        
         else:
