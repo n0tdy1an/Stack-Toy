@@ -1,4 +1,5 @@
 import os
+#The color for the rings
 colors = {
     "red": ("\033[31m|-----RED-----|\033[0m"),
     "orange":("\033[38;2;255;165;0m|----ORANGE----|\033[0m"),
@@ -7,9 +8,11 @@ colors = {
     "blue":("\033[34m|-BLUE-|\033[0m"),
 }
 stack = []
+#Repeats the code
 while True:
-    userInput = input("Type 1 to add a ring, 2 to remove a ring, type 3 to exit: ")
 
+    userInput = input("Type 1 to add a ring, 2 to remove a ring, type 3 to exit: ")
+    #If the user inputs 1, then it allows the user to add their desired ring.
     if userInput == "1":
         rings = input("Add color (red, orange, yellow, green, blue): ")
         if rings in colors:
@@ -18,7 +21,7 @@ while True:
             os.system('cls')
         else:
             print("Invalid color.")
-
+#If the user inputs 2, then they can remove rings
     elif userInput == "2":
         if not stack:
             os.system('cls')
@@ -33,13 +36,14 @@ while True:
         stack.pop()
         print(f"Removed {rings} ring.")
 
+    #If the user inputs 3, it makes the user exit the program.
     elif userInput == "3":
         print("Goodbye!")
         break
 
     else:
         print("Invalid choice.")
-
+#Shows the current stack 
     if stack:
         print("Current stack:")
         for rings in reversed(stack):
